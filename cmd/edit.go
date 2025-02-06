@@ -1,5 +1,4 @@
-The MIT License (MIT)
-
+/*
 Copyright © 2025 sottey
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -19,3 +18,38 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
+*/
+package cmd
+
+import (
+	"fmt"
+	"os"
+	"os/exec"
+	"path/filepath"
+
+	"github.com/spf13/cobra"
+)
+
+var editCmd = &cobra.Command{
+	Use:     "edit <filename>",
+	Short:   "Edit specified file",
+	Args:    cobra.MinimumNArgs(1),
+	Example: "goteplan edit Notes/Home/mynote.md",
+	Run: func(cmd *cobra.Command, args []string) {
+		filename := args[0]
+		path := filepath.Join(BaseDir, filename)
+		editor := "nano" // Change to your preferred editor
+		editCmd := exec.Command(editor, path)
+		editCmd.Stdin = os.Stdin
+		editCmd.Stdout = os.Stdout
+		editCmd.Stderr = os.Stderr
+		err := editCmd.Run()
+		if err != nil {
+			fmt.Println("Error opening editor:", err)
+		}
+	},
+}
+
+func init() {
+	rootCmd.AddCommand(editCmd)
+}

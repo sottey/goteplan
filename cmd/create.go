@@ -1,5 +1,4 @@
-The MIT License (MIT)
-
+/*
 Copyright © 2025 sottey
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -19,3 +18,39 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
+*/
+package cmd
+
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"path/filepath"
+
+	"github.com/spf13/cobra"
+)
+
+var createCmd = &cobra.Command{
+	Use:     "create <filename>",
+	Short:   "Create a new note",
+	Args:    cobra.MinimumNArgs(1),
+	Example: "goteplan create Notes/Home/mynote.md",
+	Run: func(cmd *cobra.Command, args []string) {
+		filename := args[0]
+		path := filepath.Join(BaseDir, filename)
+		fmt.Println("Enter your note content. Press Ctrl+D when done:")
+		scanner := bufio.NewScanner(os.Stdin)
+		var content string
+		for scanner.Scan() {
+			content += scanner.Text() + "\n"
+		}
+		if err := os.WriteFile(path, []byte(content), 0644); err != nil {
+			fmt.Println("Error creating file:", err)
+		}
+		fmt.Println("Note saved:", filename)
+	},
+}
+
+func init() {
+	rootCmd.AddCommand(createCmd)
+}

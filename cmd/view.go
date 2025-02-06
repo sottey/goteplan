@@ -1,5 +1,4 @@
-The MIT License (MIT)
-
+/*
 Copyright © 2025 sottey
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -19,3 +18,35 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
+*/
+package cmd
+
+import (
+	"fmt"
+	"os"
+	"path/filepath"
+
+	"github.com/spf13/cobra"
+)
+
+var viewCmd = &cobra.Command{
+	Use:     "view <filename>",
+	Short:   "View specified note",
+	Args:    cobra.MinimumNArgs(1),
+	Example: "goteplan view Notes/Home/mynote.md",
+	Run: func(cmd *cobra.Command, args []string) {
+		filename := args[0]
+
+		path := filepath.Join(BaseDir, filename)
+		content, err := os.ReadFile(path)
+		if err != nil {
+			fmt.Println("Error reading file:", err)
+			return
+		}
+		fmt.Println(string(content))
+	},
+}
+
+func init() {
+	rootCmd.AddCommand(viewCmd)
+}
