@@ -32,7 +32,7 @@ import (
 
 var listCmd = &cobra.Command{
 	Use:     "list",
-	Short:   "List all notes",
+	Short:   "List all notes - Example: goteplan list",
 	Example: "goteplan list",
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Printf("BaseDir: %v\n", BaseDir)

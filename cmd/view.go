@@ -31,7 +31,7 @@ import (
 
 var viewCmd = &cobra.Command{
 	Use:     "view <filename>",
-	Short:   "View specified note",
+	Short:   "View specified note - Example: goteplan view Notes/Home/MyNote.md",
 	Args:    cobra.MinimumNArgs(1),
 	Example: "goteplan view Notes/Home/mynote.md",
 	Run: func(cmd *cobra.Command, args []string) {

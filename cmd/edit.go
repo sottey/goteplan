@@ -32,7 +32,7 @@ import (
 
 var editCmd = &cobra.Command{
 	Use:     "edit <filename>",
-	Short:   "Edit specified file",
+	Short:   "Edit specified file - Example: goteplan edit Notes/Home/MyNote.md",
 	Args:    cobra.MinimumNArgs(1),
 	Example: "goteplan edit Notes/Home/mynote.md",
 	Run: func(cmd *cobra.Command, args []string) {

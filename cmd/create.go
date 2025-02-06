@@ -32,7 +32,7 @@ import (
 
 var createCmd = &cobra.Command{
 	Use:     "create <filename>",
-	Short:   "Create a new note",
+	Short:   "Create a new note - Example: goteplan create Notes/Home/NewNote.md",
 	Args:    cobra.MinimumNArgs(1),
 	Example: "goteplan create Notes/Home/mynote.md",
 	Run: func(cmd *cobra.Command, args []string) {

@@ -32,7 +32,7 @@ import (
 
 var searchCmd = &cobra.Command{
 	Use:     "search <query>",
-	Short:   "Search for notes with the specified string (NOTE: This IS case sensitive)",
+	Short:   "Search for notes with the specified string (NOTE: This IS case sensitive) - Example: goteplan search MikeS",
 	Args:    cobra.MinimumNArgs(1),
 	Example: "goteplan search QueryString",
 	Run: func(cmd *cobra.Command, args []string) {
