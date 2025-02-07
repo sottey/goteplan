@@ -26,34 +26,41 @@ import (
 	"os"
 	"path/filepath"
 
-	markdown "github.com/MichaelMure/go-term-markdown"
 	"github.com/spf13/cobra"
 )
 
-var viewCmd = &cobra.Command{
-	Use:     "view <filename>",
-	Short:   "View specified note - Example: goteplan view Notes/Home/MyNote.md",
+// deleteCmd represents the delete command
+var deleteCmd = &cobra.Command{
+	Use:     "delete <filename>",
+	Short:   "Delete specified note - Example: goteplan delete Notes/Home/MyNote.md",
 	Args:    cobra.MinimumNArgs(1),
-	Example: "goteplan view Notes/Home/mynote.md",
+	Example: "goteplan delete Notes/Home/mynote.md",
 	Run: func(cmd *cobra.Command, args []string) {
 		filename := args[0]
 
 		path := filepath.Join(BaseDir, filename)
-		content, err := os.ReadFile(path)
-		if err != nil {
-			fmt.Println("Error reading file:", err)
+		delErr := os.Remove(path)
+		if delErr != nil {
+			fmt.Printf("Error removing note '%v': %v", path, delErr)
 			return
 		}
 
-		if RenderMarkdown {
-			content = markdown.Render(string(content[:]), 80, 6)
-		}
+		fmt.Printf("Note '%v' removed...", path)
 
-		fmt.Println(string(content))
 	},
 }
 
 func init() {
-	viewCmd.GroupID = "main"
-	rootCmd.AddCommand(viewCmd)
+	deleteCmd.GroupID = "main"
+	rootCmd.AddCommand(deleteCmd)
+
+	// Here you will define your flags and configuration settings.
+
+	// Cobra supports Persistent Flags which will work for this command
+	// and all subcommands, e.g.:
+	// deleteCmd.PersistentFlags().String("foo", "", "A help for foo")
+
+	// Cobra supports local flags which will only run when this command
+	// is called directly, e.g.:
+	// deleteCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

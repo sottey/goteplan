@@ -32,6 +32,7 @@ import (
 )
 
 var BaseDir string
+var RenderMarkdown bool
 
 var rootCmd = &cobra.Command{
 	Use:   "goteplan",
@@ -57,7 +58,9 @@ func SetupViper() {
 	dataPath, _ := expandPath("~/Library/Containers/co.noteplan.NotePlan-setapp/Data/Library/Application Support/co.noteplan.NotePlan-setapp")
 	configPath, _ := expandPath("~/")
 	rootCmd.PersistentFlags().StringVarP(&BaseDir, "basedir", "b", "", "Root location of the NotePlan data")
+	rootCmd.PersistentFlags().BoolVarP(&RenderMarkdown, "render", "r", false, "If present, display will attempt to render markdown. If not, source will be shown.")
 	viper.BindPFlag("basedir", rootCmd.PersistentFlags().Lookup("basedir"))
+	viper.BindPFlag("render", rootCmd.PersistentFlags().Lookup("render"))
 
 	viper.SetConfigName(".goteplan")
 	viper.SetConfigType("json")
@@ -76,6 +79,7 @@ func SetupViper() {
 	}
 
 	BaseDir = viper.GetString("basedir")
+	RenderMarkdown = viper.GetBool("render")
 }
 
 func expandPath(path string) (string, error) {

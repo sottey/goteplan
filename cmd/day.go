@@ -27,29 +27,45 @@ import (
 	"path/filepath"
 	"time"
 
+	markdown "github.com/MichaelMure/go-term-markdown"
 	"github.com/spf13/cobra"
 )
 
-// todayCmd represents the today command
-var todayCmd = &cobra.Command{
-	Use:   "today",
-	Short: "Show today's calendar note",
+// dayCmd represents the day command
+var dayCmd = &cobra.Command{
+	Use:   "day [YYYMMDD]",
+	Short: "Display note from a specific date specified in the format YYYMMDD",
+	// Args:    cobra.MinimumNArgs(1),
+	Example: "goteplan day 20250206",
 	Run: func(cmd *cobra.Command, args []string) {
-		year, month, day := time.Now().Date()
-		todayFile := fmt.Sprintf("Calendar/%04d%02d%02d.md", year, int(month), day)
-		fmt.Printf("Displaying %v\n\n", todayFile)
+		var dateFile string
 
-		path := filepath.Join(BaseDir, todayFile)
+		// If date provided, use that, else use today's date
+		if len(args) == 0 {
+			year, month, day := time.Now().Date()
+			dateFile = fmt.Sprintf("Calendar/%04d%02d%02d.md", year, int(month), day)
+		} else {
+			dateFile = fmt.Sprintf("Calendar/%v.md", args[0])
+		}
+
+		fmt.Printf("Displaying %v\n\n", dateFile)
+
+		path := filepath.Join(BaseDir, dateFile)
 		content, err := os.ReadFile(path)
 		if err != nil {
 			fmt.Println("Error reading file:", err)
 			return
 		}
-		fmt.Println(string(content))
+
+		if RenderMarkdown {
+			content = markdown.Render(string(content[:]), 80, 6)
+		}
+
+		fmt.Println(string(content[:]))
 	},
 }
 
 func init() {
-	todayCmd.GroupID = "main"
-	rootCmd.AddCommand(todayCmd)
+	dayCmd.GroupID = "main"
+	rootCmd.AddCommand(dayCmd)
 }

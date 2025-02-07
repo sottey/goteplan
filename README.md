@@ -11,14 +11,15 @@ goteplan list -b "~/NotePLan/"
 
 ### Usage:
 ```
-goteplan [command] [flag]
+goteplan [command]
 
 Commands:
   create      Create a new note - Example: goteplan create Notes/Home/NewNote.md
+  day         Display note from a specific date specified in the format YYYMMDD
+  delete      Delete specified note - Example: goteplan delete Notes/Home/MyNote.md
   edit        Edit specified file - Example: goteplan edit Notes/Home/MyNote.md
   list        List all notes - Example: goteplan list
   search      Search for notes with the specified string (NOTE: This IS case sensitive) - Example: goteplan search MikeS
-  today       Show today's calendar note
   view        View specified note - Example: goteplan view Notes/Home/MyNote.md
 
 Additional Commands:
@@ -28,6 +29,7 @@ Additional Commands:
 Flags:
   -b, --basedir string   Root location of the NotePlan data
   -h, --help             help for goteplan
+  -r, --render           If present, display will attempt to render markdown. If not, source will be shown.
 
 Use "goteplan [command] --help" for more information about a command.
 ```
