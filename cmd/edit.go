@@ -32,20 +32,27 @@ import (
 
 var editCmd = &cobra.Command{
 	Use:     "edit <filename>",
-	Short:   "Edit specified file - Example: goteplan edit Notes/Home/MyNote.md",
+	Short:   "Edit specified note - Example: goteplan edit Notes/Home/MyNote.md",
 	Args:    cobra.MinimumNArgs(1),
 	Example: "goteplan edit Notes/Home/mynote.md",
 	Run: func(cmd *cobra.Command, args []string) {
 		filename := args[0]
 		path := filepath.Join(BaseDir, filename)
-		editor := "nano" // Change to your preferred editor
+		editor := os.Getenv("EDITOR")
+
+		if editor == "" {
+			editor = "nano"
+		}
+
+		fmt.Printf("Opening with editor: '%v'\n", editor)
+
 		editCmd := exec.Command(editor, path)
 		editCmd.Stdin = os.Stdin
 		editCmd.Stdout = os.Stdout
 		editCmd.Stderr = os.Stderr
 		err := editCmd.Run()
 		if err != nil {
-			fmt.Println("Error opening editor:", err)
+			fmt.Printf("Error opening %v: %v\n", editor, err)
 		}
 	},
 }
