@@ -15,7 +15,7 @@ goteplan [command]
 
 Commands:
   create      Create a new note - Example: goteplan create Notes/Home/NewNote.md
-  day         Display note from a specific date specified in the format YYYMMDD
+  day         Display note from a specific date specified in the format YYYMMDD (if no date provided, today's note is shown)
   delete      Delete specified note - Example: goteplan delete Notes/Home/MyNote.md
   edit        Edit specified file - Example: goteplan edit Notes/Home/MyNote.md
   list        List all notes - Example: goteplan list
