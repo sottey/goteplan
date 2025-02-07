@@ -60,5 +60,6 @@ var searchCmd = &cobra.Command{
 }
 
 func init() {
+	searchCmd.GroupID = "main"
 	rootCmd.AddCommand(searchCmd)
 }

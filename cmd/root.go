@@ -46,6 +46,14 @@ func Execute() {
 }
 
 func init() {
+	var mainGroup cobra.Group
+	mainGroup.Title = "Commands:"
+	mainGroup.ID = "main"
+	rootCmd.AddGroup(&mainGroup)
+	SetupViper()
+}
+
+func SetupViper() {
 	dataPath, _ := expandPath("~/Library/Containers/co.noteplan.NotePlan-setapp/Data/Library/Application Support/co.noteplan.NotePlan-setapp")
 	configPath, _ := expandPath("~/")
 	rootCmd.PersistentFlags().StringVarP(&BaseDir, "basedir", "b", "", "Root location of the NotePlan data")

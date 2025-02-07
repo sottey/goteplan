@@ -51,5 +51,6 @@ var editCmd = &cobra.Command{
 }
 
 func init() {
+	editCmd.GroupID = "main"
 	rootCmd.AddCommand(editCmd)
 }

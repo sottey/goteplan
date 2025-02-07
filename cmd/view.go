@@ -48,5 +48,6 @@ var viewCmd = &cobra.Command{
 }
 
 func init() {
+	viewCmd.GroupID = "main"
 	rootCmd.AddCommand(viewCmd)
 }

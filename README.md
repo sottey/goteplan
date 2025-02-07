@@ -11,17 +11,19 @@ goteplan list -b "~/NotePLan/"
 
 ### Usage:
 ```
-Usage:
-  goteplan [command]
+goteplan [command] [flag]
 
-Available Commands:
-  completion  Generate the autocompletion script for the specified shell
+Commands:
   create      Create a new note - Example: goteplan create Notes/Home/NewNote.md
   edit        Edit specified file - Example: goteplan edit Notes/Home/MyNote.md
-  help        Help about any command
   list        List all notes - Example: goteplan list
   search      Search for notes with the specified string (NOTE: This IS case sensitive) - Example: goteplan search MikeS
+  today       Show today's calendar note
   view        View specified note - Example: goteplan view Notes/Home/MyNote.md
+
+Additional Commands:
+  completion  Generate the autocompletion script for the specified shell
+  help        Help about any command
 
 Flags:
   -b, --basedir string   Root location of the NotePlan data

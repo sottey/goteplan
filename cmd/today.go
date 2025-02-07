@@ -22,36 +22,34 @@ THE SOFTWARE.
 package cmd
 
 import (
-	"bufio"
 	"fmt"
 	"os"
 	"path/filepath"
+	"time"
 
 	"github.com/spf13/cobra"
 )
 
-var createCmd = &cobra.Command{
-	Use:     "create <filename>",
-	Short:   "Create a new note - Example: goteplan create Notes/Home/NewNote.md",
-	Args:    cobra.MinimumNArgs(1),
-	Example: "goteplan create Notes/Home/mynote.md",
+// todayCmd represents the today command
+var todayCmd = &cobra.Command{
+	Use:   "today",
+	Short: "Show today's calendar note",
 	Run: func(cmd *cobra.Command, args []string) {
-		filename := args[0]
-		path := filepath.Join(BaseDir, filename)
-		fmt.Println("Enter your note content. Press Ctrl+D when done:")
-		scanner := bufio.NewScanner(os.Stdin)
-		var content string
-		for scanner.Scan() {
-			content += scanner.Text() + "\n"
+		year, month, day := time.Now().Date()
+		todayFile := fmt.Sprintf("Calendar/%04d%02d%02d.md", year, int(month), day)
+		fmt.Printf("Displaying %v\n\n", todayFile)
+
+		path := filepath.Join(BaseDir, todayFile)
+		content, err := os.ReadFile(path)
+		if err != nil {
+			fmt.Println("Error reading file:", err)
+			return
 		}
-		if err := os.WriteFile(path, []byte(content), 0644); err != nil {
-			fmt.Println("Error creating file:", err)
-		}
-		fmt.Println("Note saved:", filename)
+		fmt.Println(string(content))
 	},
 }
 
 func init() {
-	createCmd.GroupID = "main"
-	rootCmd.AddCommand(createCmd)
+	todayCmd.GroupID = "main"
+	rootCmd.AddCommand(todayCmd)
 }
