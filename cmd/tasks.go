@@ -25,18 +25,18 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 
-	markdown "github.com/MichaelMure/go-term-markdown"
 	"github.com/spf13/cobra"
 )
 
-// dayCmd represents the day command
-var dayCmd = &cobra.Command{
-	Use: "day [YYYMMDD]",
-	Short: `Display note from a specific date specified in the format YYYMMDD 
-	    (if no date provided, today's note is shown)`,
-	Example: "goteplan day 20250206",
+// tasksCmd represents the tasks command
+var tasksCmd = &cobra.Command{
+	Use: "tasks [YYYMMDD]",
+	Short: `Display tasks from a specific date specified in the format YYYMMDD 
+	    (if no date provided, today's note is used)`,
+	Example: "goteplan tasks 20250206",
 	Run: func(cmd *cobra.Command, args []string) {
 		var dateFile string
 
@@ -48,7 +48,7 @@ var dayCmd = &cobra.Command{
 			dateFile = fmt.Sprintf("Calendar/%v.md", args[0])
 		}
 
-		fmt.Printf("Displaying %v\n\n", dateFile)
+		fmt.Printf("Displaying tasks for %v\n\n", dateFile)
 
 		path := filepath.Join(BaseDir, dateFile)
 		content, err := os.ReadFile(path)
@@ -57,15 +57,36 @@ var dayCmd = &cobra.Command{
 			return
 		}
 
-		if RenderMarkdown {
-			content = markdown.Render(string(content[:]), 80, 6)
-		}
+		tasks := getTasks(string(content[:]))
 
-		fmt.Println(string(content[:]))
+		fmt.Println(tasks)
 	},
 }
 
 func init() {
-	dayCmd.GroupID = "main"
-	rootCmd.AddCommand(dayCmd)
+	tasksCmd.GroupID = "main"
+	rootCmd.AddCommand(tasksCmd)
+}
+
+func getTasks(note string) string {
+	var ret string
+	noteLines := strings.Split(note, "\n")
+
+	for _, currLine := range noteLines {
+		currLine = strings.TrimSpace(currLine)
+		if strings.HasPrefix(currLine, TodoSymbol+" ") {
+			task := strings.Replace(currLine, TodoSymbol+" ", "", -1)
+			if !strings.HasPrefix(task, "[x]") {
+				task = "[ ] " + task
+			}
+
+			ret += task + "\n"
+		}
+	}
+
+	if len(ret) == 0 {
+		ret = "No tasks found"
+	}
+
+	return ret
 }

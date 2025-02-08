@@ -33,6 +33,7 @@ import (
 
 var BaseDir string
 var RenderMarkdown bool
+var TodoSymbol string
 
 var rootCmd = &cobra.Command{
 	Use:   "goteplan",
@@ -57,10 +58,14 @@ func init() {
 func SetupViper() {
 	dataPath, _ := expandPath("~/Library/Containers/co.noteplan.NotePlan-setapp/Data/Library/Application Support/co.noteplan.NotePlan-setapp")
 	configPath, _ := expandPath("~/")
+
 	rootCmd.PersistentFlags().StringVarP(&BaseDir, "basedir", "b", "", "Root location of the NotePlan data")
 	rootCmd.PersistentFlags().BoolVarP(&RenderMarkdown, "render", "r", false, "If present, display will attempt to render markdown. If not, source will be shown.")
+	rootCmd.PersistentFlags().StringVarP(&TodoSymbol, "todosymbol", "t", "*", "When using task command, a line starting with this symbol will be considered a task")
+
 	viper.BindPFlag("basedir", rootCmd.PersistentFlags().Lookup("basedir"))
 	viper.BindPFlag("render", rootCmd.PersistentFlags().Lookup("render"))
+	viper.BindPFlag("todosymbol", rootCmd.PersistentFlags().Lookup("todosymbol"))
 
 	viper.SetConfigName(".goteplan")
 	viper.SetConfigType("json")
@@ -69,6 +74,8 @@ func SetupViper() {
 		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
 			fmt.Println("Config file not found. Creating...")
 			viper.SetDefault("basedir", dataPath)
+			viper.SetDefault("render", RenderMarkdown)
+			viper.SetDefault("todosymbol", TodoSymbol)
 			if errTwo := viper.SafeWriteConfig(); errTwo != nil {
 				fmt.Printf("Error creating config file: '%v'\n", errTwo)
 			}
@@ -80,6 +87,7 @@ func SetupViper() {
 
 	BaseDir = viper.GetString("basedir")
 	RenderMarkdown = viper.GetBool("render")
+	TodoSymbol = viper.GetString("todosymbol")
 }
 
 func expandPath(path string) (string, error) {
