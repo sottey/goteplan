@@ -6,7 +6,7 @@ This is an unofficial app to manage NotePlan notes from the command line. It sho
 >NOTE: The first time you run this, you should specify the argument -b [root of noteplan docs]. This will be saved to the config file. Absolute or relative pathing can be used.
 EXAMPLE:
 ``` 
-goteplan list -b "~/NotePLan/"
+goteplan list -b "~/NotePlan/"
 ```
 
 ### Usage:
@@ -43,5 +43,5 @@ Use "goteplan [command] --help" for more information about a command.
   "basedir": "Root/Location/Of/Noteplan/Data" - Specifies location Noteplan saves data
   "render": false - If true, raw note will be shown. If false, markdown will be (attempted to be) rendered
   "todosymbol": "*" - Symbol used for tasks (Noteplan allows *, -. Numbering not yet supported) 
-
+  "nocase": false - If true, searches will be case insensitive. If false, searches will be case sensitive
 ```
