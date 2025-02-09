@@ -47,7 +47,7 @@ var createCmd = &cobra.Command{
 		if err := os.WriteFile(path, []byte(content), 0644); err != nil {
 			fmt.Println("Error creating file:", err)
 		}
-		fmt.Println("Note saved:", filename)
+		fmt.Printf("Note saved to '%v'\n", path)
 	},
 }
 

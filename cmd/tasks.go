@@ -48,9 +48,9 @@ var tasksCmd = &cobra.Command{
 			dateFile = fmt.Sprintf("Calendar/%v.md", args[0])
 		}
 
-		fmt.Printf("Displaying tasks for %v\n\n", dateFile)
-
 		path := filepath.Join(BaseDir, dateFile)
+		fmt.Printf("Displaying tasks for %v\n\n", path)
+
 		content, err := os.ReadFile(path)
 		if err != nil {
 			fmt.Println("Error reading file:", err)

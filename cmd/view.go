@@ -39,6 +39,8 @@ var viewCmd = &cobra.Command{
 		filename := args[0]
 
 		path := filepath.Join(BaseDir, filename)
+		fmt.Printf("Viewing '%v'\n\n", path)
+
 		content, err := os.ReadFile(path)
 		if err != nil {
 			fmt.Println("Error reading file:", err)

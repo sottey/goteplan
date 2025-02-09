@@ -55,7 +55,7 @@ var searchCmd = &cobra.Command{
 				}
 
 				if strings.Contains(string(content), query) {
-					fmt.Println("Match found in:", strings.TrimPrefix(path, BaseDir+"/"))
+					fmt.Println("Match : ", strings.TrimPrefix(path, BaseDir+"/"))
 					counter++
 				}
 			}
@@ -65,7 +65,7 @@ var searchCmd = &cobra.Command{
 		if err != nil {
 			fmt.Println("Error searching notes:", err)
 		} else {
-			fmt.Printf("%v notes found for query '%v' (Case Inensitive: %v)\n", counter, query, NoCaseSearch)
+			fmt.Printf("%v notes found for query '%v' (Case Inensitive: %v)\n\n", counter, query, NoCaseSearch)
 		}
 	},
 }

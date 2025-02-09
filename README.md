@@ -11,7 +11,7 @@ goteplan list -b "~/NotePlan/"
 
 ### Usage:
 ```
-goteplan [command]
+  goteplan [command]
 
 Commands:
   create      Create a new note - Example: goteplan create Notes/Home/NewNote.md
@@ -32,16 +32,19 @@ Additional Commands:
 Flags:
   -b, --basedir string      Root location of the NotePlan data
   -h, --help                help for goteplan
-  -n, --nocase              If present, searches will be case insensitive.
-  -r, --render              If present, display will attempt to render markdown. If not, source will be shown.
+  -n, --nocase              If present, searches will be case insensitive
+  -r, --render              If present, display will attempt to render markdown. If not, source will be shown
+  -s, --setapp              If present, SetApp version of Noteplan data location used otherwise AppStore data location is used
   -t, --todosymbol string   When using task command, a line starting with this symbol will be considered a task (default "*")
 
 Use "goteplan [command] --help" for more information about a command.
 
-
 ### Config file (defaults to ~/.goteplan.json)
-  "basedir": "Root/Location/Of/Noteplan/Data" - Specifies location Noteplan saves data
-  "render": false - If true, raw note will be shown. If false, markdown will be (attempted to be) rendered
+ # NAME       : DEFAULT - DESCRIPTION
+  "basedir"   : "Root/Location/Of/Noteplan/Data" - Specifies location Noteplan saves data
+  "render"    : false - If true, raw note will be shown. If false, markdown will be (attempted to be) rendered
   "todosymbol": "*" - Symbol used for tasks (Noteplan allows *, -. Numbering not yet supported) 
-  "nocase": false - If true, searches will be case insensitive. If false, searches will be case sensitive
+  "nocase"    : false - If true, searches will be case insensitive. If false, searches will be case sensitive
+  "setapp"    : false - If true, uses data directory used by SetApp instead of AppStore version
+
 ```

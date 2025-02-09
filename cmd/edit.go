@@ -44,7 +44,7 @@ var editCmd = &cobra.Command{
 			editor = "nano"
 		}
 
-		fmt.Printf("Opening with editor: '%v'\n", editor)
+		fmt.Printf("Opening '%v' in '%v'\n\n", path, editor)
 
 		editCmd := exec.Command(editor, path)
 		editCmd.Stdin = os.Stdin

@@ -35,11 +35,16 @@ var BaseDir string
 var RenderMarkdown bool
 var TodoSymbol string
 var NoCaseSearch bool
+var IsSetApp bool
 
 var basedir_setting_name = "basedir"
 var render_setting_name = "render"
 var todosymbol_setting_name = "todosymbol"
 var nocase_setting_name = "nocase"
+var setapp_setting_name = "setapp"
+
+var appStoreDataLocation = ""
+var setAppDataLocation = "~/Library/Containers/co.noteplan.NotePlan-setapp/Data/Library/Application Support/co.noteplan.NotePlan-setapp"
 
 var rootCmd = &cobra.Command{
 	Use:   "goteplan",
@@ -64,27 +69,38 @@ func init() {
 func SetupViper() {
 	configPath, _ := expandPath("~/")
 
-	viper.SetDefault(basedir_setting_name, "~/Library/Containers/co.noteplan.NotePlan-setapp/Data/Library/Application Support/co.noteplan.NotePlan-setapp")
+	// Default to appstore version
+	dataPath, _ := expandPath(appStoreDataLocation)
+
+	viper.SetDefault(basedir_setting_name, dataPath)
 	viper.SetDefault(render_setting_name, false)
 	viper.SetDefault(todosymbol_setting_name, "*")
 	viper.SetDefault(nocase_setting_name, false)
+	viper.SetDefault(setapp_setting_name, false)
 
 	// Set up flags for rootCmd
 	rootCmd.PersistentFlags().StringVarP(&BaseDir, basedir_setting_name, "b", "", "Root location of the NotePlan data")
-	rootCmd.PersistentFlags().BoolVarP(&RenderMarkdown, render_setting_name, "r", false, "If present, display will attempt to render markdown. If not, source will be shown.")
+	rootCmd.PersistentFlags().BoolVarP(&RenderMarkdown, render_setting_name, "r", false, "If present, display will attempt to render markdown. If not, source will be shown")
 	rootCmd.PersistentFlags().StringVarP(&TodoSymbol, todosymbol_setting_name, "t", "*", "When using task command, a line starting with this symbol will be considered a task")
-	rootCmd.PersistentFlags().BoolVarP(&NoCaseSearch, nocase_setting_name, "n", false, "If present, searches will be case insensitive.")
+	rootCmd.PersistentFlags().BoolVarP(&NoCaseSearch, nocase_setting_name, "n", false, "If present, searches will be case insensitive")
+	rootCmd.PersistentFlags().BoolVarP(&IsSetApp, setapp_setting_name, "s", false, "If present, SetApp version of Noteplan data location used")
 
 	// Connect viper and cobra
 	viper.BindPFlag(basedir_setting_name, rootCmd.PersistentFlags().Lookup(basedir_setting_name))
 	viper.BindPFlag(render_setting_name, rootCmd.PersistentFlags().Lookup(render_setting_name))
 	viper.BindPFlag(todosymbol_setting_name, rootCmd.PersistentFlags().Lookup(todosymbol_setting_name))
 	viper.BindPFlag(nocase_setting_name, rootCmd.PersistentFlags().Lookup(nocase_setting_name))
+	viper.BindPFlag(setapp_setting_name, rootCmd.PersistentFlags().Lookup(setapp_setting_name))
 
 	// Set up how viper reads config
 	viper.SetConfigName(".goteplan")
 	viper.SetConfigType("json")
 	viper.AddConfigPath(configPath)
+
+	// Set up data dir if setapp flag specified
+	if IsSetApp {
+		BaseDir = setAppDataLocation
+	}
 
 	// If the config doesn't exist, create
 	if err := viper.ReadInConfig(); err != nil {
@@ -102,6 +118,7 @@ func SetupViper() {
 		RenderMarkdown = viper.GetBool(render_setting_name)
 		TodoSymbol = viper.GetString(todosymbol_setting_name)
 		NoCaseSearch = viper.GetBool(nocase_setting_name)
+		IsSetApp = viper.GetBool(setapp_setting_name)
 	}
 }
 

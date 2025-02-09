@@ -41,11 +41,11 @@ var deleteCmd = &cobra.Command{
 		path := filepath.Join(BaseDir, filename)
 		delErr := os.Remove(path)
 		if delErr != nil {
-			fmt.Printf("Error removing note '%v': %v", path, delErr)
+			fmt.Printf("Error removing note '%v': %v\n", path, delErr)
 			return
 		}
 
-		fmt.Printf("Note '%v' removed...", path)
+		fmt.Printf("Note '%v' removed...\n", path)
 
 	},
 }
