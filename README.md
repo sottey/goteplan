@@ -11,18 +11,18 @@ goteplan list -b "~/NotePLan/"
 
 ### Usage:
 ```
-  goteplan [command]
+goteplan [command]
 
 Commands:
   create      Create a new note - Example: goteplan create Notes/Home/NewNote.md
   day         Display note from a specific date specified in the format YYYMMDD 
-            (if no date provided, today's note is shown)
+                (if no date provided, today's note is shown)
   delete      Delete specified note - Example: goteplan delete Notes/Home/MyNote.md
   edit        Edit specified note - Example: goteplan edit Notes/Home/MyNote.md
   list        List all notes - Example: goteplan list
-  search      Search for notes with the specified string (NOTE: This IS case sensitive) - Example: goteplan search MikeS
+  search      Search for notes with the specified string - Example: goteplan search MikeS
   tasks       Display tasks from a specific date specified in the format YYYMMDD 
-            (if no date provided, today's note is used)
+                (if no date provided, today's note is used)
   view        View specified note - Example: goteplan view Notes/Home/MyNote.md
 
 Additional Commands:
@@ -32,6 +32,7 @@ Additional Commands:
 Flags:
   -b, --basedir string      Root location of the NotePlan data
   -h, --help                help for goteplan
+  -n, --nocase              If present, searches will be case insensitive.
   -r, --render              If present, display will attempt to render markdown. If not, source will be shown.
   -t, --todosymbol string   When using task command, a line starting with this symbol will be considered a task (default "*")
 
