@@ -34,6 +34,12 @@ import (
 var BaseDir string
 var RenderMarkdown bool
 var TodoSymbol string
+var NoCaseSearch bool
+
+var basedir_setting_name = "basedir"
+var render_setting_name = "render"
+var todosymbol_setting_name = "todosymbol"
+var nocase_setting_name = "nocase"
 
 var rootCmd = &cobra.Command{
 	Use:   "goteplan",
@@ -56,26 +62,34 @@ func init() {
 }
 
 func SetupViper() {
-	dataPath, _ := expandPath("~/Library/Containers/co.noteplan.NotePlan-setapp/Data/Library/Application Support/co.noteplan.NotePlan-setapp")
 	configPath, _ := expandPath("~/")
 
-	rootCmd.PersistentFlags().StringVarP(&BaseDir, "basedir", "b", "", "Root location of the NotePlan data")
-	rootCmd.PersistentFlags().BoolVarP(&RenderMarkdown, "render", "r", false, "If present, display will attempt to render markdown. If not, source will be shown.")
-	rootCmd.PersistentFlags().StringVarP(&TodoSymbol, "todosymbol", "t", "*", "When using task command, a line starting with this symbol will be considered a task")
+	viper.SetDefault(basedir_setting_name, "~/Library/Containers/co.noteplan.NotePlan-setapp/Data/Library/Application Support/co.noteplan.NotePlan-setapp")
+	viper.SetDefault(render_setting_name, false)
+	viper.SetDefault(todosymbol_setting_name, "*")
+	viper.SetDefault(nocase_setting_name, false)
 
-	viper.BindPFlag("basedir", rootCmd.PersistentFlags().Lookup("basedir"))
-	viper.BindPFlag("render", rootCmd.PersistentFlags().Lookup("render"))
-	viper.BindPFlag("todosymbol", rootCmd.PersistentFlags().Lookup("todosymbol"))
+	// Set up flags for rootCmd
+	rootCmd.PersistentFlags().StringVarP(&BaseDir, basedir_setting_name, "b", "", "Root location of the NotePlan data")
+	rootCmd.PersistentFlags().BoolVarP(&RenderMarkdown, render_setting_name, "r", false, "If present, display will attempt to render markdown. If not, source will be shown.")
+	rootCmd.PersistentFlags().StringVarP(&TodoSymbol, todosymbol_setting_name, "t", "*", "When using task command, a line starting with this symbol will be considered a task")
+	rootCmd.PersistentFlags().BoolVarP(&NoCaseSearch, nocase_setting_name, "n", false, "If present, searches will be case insensitive.")
 
+	// Connect viper and cobra
+	viper.BindPFlag(basedir_setting_name, rootCmd.PersistentFlags().Lookup(basedir_setting_name))
+	viper.BindPFlag(render_setting_name, rootCmd.PersistentFlags().Lookup(render_setting_name))
+	viper.BindPFlag(todosymbol_setting_name, rootCmd.PersistentFlags().Lookup(todosymbol_setting_name))
+	viper.BindPFlag(nocase_setting_name, rootCmd.PersistentFlags().Lookup(nocase_setting_name))
+
+	// Set up how viper reads config
 	viper.SetConfigName(".goteplan")
 	viper.SetConfigType("json")
 	viper.AddConfigPath(configPath)
+
+	// If the config doesn't exist, create
 	if err := viper.ReadInConfig(); err != nil {
 		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
 			fmt.Println("Config file not found. Creating...")
-			viper.SetDefault("basedir", dataPath)
-			viper.SetDefault("render", RenderMarkdown)
-			viper.SetDefault("todosymbol", TodoSymbol)
 			if errTwo := viper.SafeWriteConfig(); errTwo != nil {
 				fmt.Printf("Error creating config file: '%v'\n", errTwo)
 			}
@@ -83,11 +97,12 @@ func SetupViper() {
 			fmt.Printf("Error opening config file: %v\n", err)
 			return
 		}
+	} else {
+		BaseDir = viper.GetString(basedir_setting_name)
+		RenderMarkdown = viper.GetBool(render_setting_name)
+		TodoSymbol = viper.GetString(todosymbol_setting_name)
+		NoCaseSearch = viper.GetBool(nocase_setting_name)
 	}
-
-	BaseDir = viper.GetString("basedir")
-	RenderMarkdown = viper.GetBool("render")
-	TodoSymbol = viper.GetString("todosymbol")
 }
 
 func expandPath(path string) (string, error) {

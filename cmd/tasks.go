@@ -35,7 +35,7 @@ import (
 var tasksCmd = &cobra.Command{
 	Use: "tasks [YYYMMDD]",
 	Short: `Display tasks from a specific date specified in the format YYYMMDD 
-	    (if no date provided, today's note is used)`,
+	        (if no date provided, today's note is used)`,
 	Example: "goteplan tasks 20250206",
 	Run: func(cmd *cobra.Command, args []string) {
 		var dateFile string

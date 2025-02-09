@@ -35,7 +35,7 @@ import (
 var dayCmd = &cobra.Command{
 	Use: "day [YYYMMDD]",
 	Short: `Display note from a specific date specified in the format YYYMMDD 
-	    (if no date provided, today's note is shown)`,
+	        (if no date provided, today's note is shown)`,
 	Example: "goteplan day 20250206",
 	Run: func(cmd *cobra.Command, args []string) {
 		var dateFile string

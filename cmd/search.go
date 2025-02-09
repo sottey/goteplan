@@ -32,11 +32,12 @@ import (
 
 var searchCmd = &cobra.Command{
 	Use:     "search <query>",
-	Short:   "Search for notes with the specified string (NOTE: This IS case sensitive) - Example: goteplan search MikeS",
+	Short:   "Search for notes with the specified string - Example: goteplan search MikeS",
 	Args:    cobra.MinimumNArgs(1),
-	Example: "goteplan search QueryString",
+	Example: "goteplan search QueryString \t# Search for QueryString using exact case\ngoteplan search -n QueryString \t# Search for querystring without case sensitivity",
 	Run: func(cmd *cobra.Command, args []string) {
 		query := args[0]
+		counter := 0
 
 		err := filepath.Walk(BaseDir, func(path string, info os.FileInfo, err error) error {
 			if err != nil {
@@ -47,14 +48,24 @@ var searchCmd = &cobra.Command{
 				if err != nil {
 					return nil
 				}
+
+				if NoCaseSearch {
+					content = []byte(strings.ToLower(string(content)))
+					query = strings.ToLower(query)
+				}
+
 				if strings.Contains(string(content), query) {
 					fmt.Println("Match found in:", strings.TrimPrefix(path, BaseDir+"/"))
+					counter++
 				}
 			}
 			return nil
 		})
+
 		if err != nil {
 			fmt.Println("Error searching notes:", err)
+		} else {
+			fmt.Printf("%v notes found for query '%v' (Case Inensitive: %v)\n", counter, query, NoCaseSearch)
 		}
 	},
 }
